@@ -1,0 +1,6 @@
+# Generated when building the ROS package
+/build/
+/msg_gen/
+/src/
+/srv_gen/
+

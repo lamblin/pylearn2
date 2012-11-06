@@ -1,0 +1,16 @@
+<package>
+  <description brief="pl3_data_ros">
+
+     ROS interface for Pylearn3's data module.
+
+  </description>
+  <author>Pascal Lamblin</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/pl3_data_ros</url>
+  <depend package="rospy"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+
