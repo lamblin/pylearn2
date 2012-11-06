@@ -1,6 +1,6 @@
 import exceptions
-from pylearn3.data import cache
-from pylearn3.data import backends
+#from pylearn3.data import cache
+#from pylearn3.data import backends
 
 
 class DataSource:
@@ -22,7 +22,7 @@ class DataSource:
         # if bach is list-like (or iterable
         # but not infinite), we haveto gather
         # the elements indexed by the list
-        # (would obviously not work on 
+        # (would obviously not work on
         # write-only or stream backends)
         #
         # raise NotIterable or something if
@@ -33,22 +33,21 @@ class DataSource:
         else:
             raise exceptions.IOError("Not Redable")
 
-    def gather(self,items):
+    def gather(self, items):
         """
         Performs a gather-read from items (where items is an iterable of
         some sort yielding the keys to read) (reads affect the cache)
         """
         if self.backend.is_readable():
-            z=self.backend.gather(items)
+            z = self.backend.gather(items)
             if self.cache:
-                for (i,z) in zip(items,z):
-                    self.cache[i]=z
+                for (i, z) in zip(items, z):
+                    self.cache[i] = z
             else:
                 # no cache, so no problems
                 pass
         else:
             raise exceptions.IOError("Not Readable")
-        
 
     def scatter_nt(self, items):
         """
@@ -62,8 +61,7 @@ class DataSource:
         else:
             raise exceptions.IOError("Not Writable")
 
-
-    def scatter(self,items):
+    def scatter(self, items):
         """
         Performs a scatter-write of items. (where items is an iterable of
         some sort yielding tuple-like objects with the first element taken
@@ -73,36 +71,35 @@ class DataSource:
             self.backend.scatter(items)
         else:
             raise exceptions.IOError("Not Writable")
-        
+
         if self.cache:
             for i in items:
-                self.cache[i[0]]=i[1:]
+                self.cache[i[0]] = i[1:]
         else:
             # no cache, so no problems.
             pass
 
-
-    def __setitem__(self,x,v):
+    def __setitem__(self, x, v):
         if self.backend.is_writable():
             if self.cache:
-                self.cache[x]=v # may cause ejection
-            self.backend[x]=v
+                self.cache[x] = v  # may cause ejection
+            self.backend[x] = v
 
-    def __getitem__(self,x):
+    def __getitem__(self, x):
         if self.backend.is_readable():
             if self.cache:
                 if x in self.cache:
                     return self.cache[x]
                 else:
-                    z=self.backend[x]
+                    z = self.backend[x]
                     if self.cache:
-                        self.cache[x]=z # may cause ejection
+                        self.cache[x] = z  # may cause ejection
                     return z
 
     def prefetch(self):
         """
         Prefetches keys from the cache's (if any) prefetcher (if any).
-        
+
         This is a default implementation that relies on
         a Prefetcher-derived class. If you want to do something
         fancier, provide an alternate implementation in the
@@ -110,14 +107,15 @@ class DataSource:
         """
         if self.cache:
             if self.cache.prefetcher:
-                to_prefetch=self.cache.prefetcher.prefetch()
+                to_prefetch = self.cache.prefetcher.prefetch()
                 if to_prefetch:
-                    if self.backend.is_streaming:
-                        items=self.backend.next(to_prefetch)
+                    if self.backend.is_stream:
+                        items = self.backend.next(to_prefetch)
                     else:
                         # random-access
-                        for p in to_prefetch:
-                            self.cache[p]=self.backend[p]
+                        items = to_prefetch
+                    for p in items:
+                        self.cache[p] = self.backend[p]
                 else:
                     # do nothing yet
                     pass
@@ -132,6 +130,5 @@ class DataSource:
                  backend,
                  cache=None):
 
-        self.backend=backend
-        self.cache=cache
-
+        self.backend = backend
+        self.cache = cache

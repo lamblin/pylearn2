@@ -11,12 +11,10 @@ class Cache(object):
     this class and add policy-specific code.
     """
 
-
     # "enums" that are passed to a prefetcher as
     # hints for read or write
-    _READ=0
-    _WRITE=1
-
+    _READ = 0
+    _WRITE = 1
 
     def size(self):
         """Returns max. cache size (while len returns the current number of
@@ -46,7 +44,7 @@ class Cache(object):
         """
         raise exceptions.NotImplementedError
 
-    def __contains__(self,key):
+    def __contains__(self, key):
         """Returns True if the item is in the cache."""
         raise exceptions.NotImplementedError
 

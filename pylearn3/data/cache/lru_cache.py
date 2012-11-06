@@ -1,5 +1,4 @@
 
-import exceptions
 import cache
 
 
@@ -109,7 +108,7 @@ class LRUCache(cache.Cache):
         self.timestamps[key] = self._now()
         self.items[key] = value
         if self.prefetcher:
-            self.prefetcher.add(key,cache.WRITE)
+            self.prefetcher.add(key, cache.WRITE)
 
     def __getitem__(self, key):
         """Overloads the read operator[]
@@ -124,14 +123,14 @@ class LRUCache(cache.Cache):
             self.timestamps[key] = self._now()
 
             if self.prefetcher:
-                self.prefetcher.add(key,cache.READ)
+                self.prefetcher.add(key, cache.READ)
 
             return self.items[key]
         else:
             # or raise an error
             raise KeyError
 
-    def __init__(self, 
+    def __init__(self,
                  cache_size=1000,
                  prefetcher=None):
         #super(LRUCache,self).__init__()

@@ -35,7 +35,7 @@ class Backend:
         """
         raise exceptions.NotImplementedError
 
-    def next(self,n=1):
+    def next(self, n=1):
         """
         If the source is streaming, returns the next n (defaults to 1)
         items in the source.
@@ -57,7 +57,7 @@ class Backend:
 
     def scatter(self, items_tuples):
         """
-        Perform a scatter-write: writes the objects at 
+        Perform a scatter-write: writes the objects at
         positions indexed by the first member of the
         tuple-like objects.
 
@@ -68,7 +68,7 @@ class Backend:
         """
         raise exceptions.NotImplementedError
 
-    def __contains__(self,x):
+    def __contains__(self, x):
         """
         This function determines whether or not (at least one) x is in the
         collection.
@@ -126,7 +126,7 @@ class Backend:
         """
         returns whether or not the backend accepts write opetations
         """
-        raise exception.NotImplementedError
+        raise exceptions.NotImplementedError
 
     def description(self):
         """

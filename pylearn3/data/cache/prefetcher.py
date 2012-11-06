@@ -1,9 +1,10 @@
 
 import exceptions
 
+
 class Prefetcher:
 
-    def add(self,key,mode):
+    def add(self, key, mode):
         """
         Adds a key to the key snoop cache.
 
@@ -29,7 +30,6 @@ class Prefetcher:
         Resets history.
         """
         raise exceptions.NotImplementedError
-
 
     def __init__(self,
                  cachesize,

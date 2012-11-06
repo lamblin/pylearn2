@@ -2,42 +2,45 @@
 
 import exceptions
 import backend
-import codecs
+#import codecs
 import csv
-#from cache.lru_cache import LRUCache
+#from pylearn3.data.cache import LRUCache
 
 
 class CSVBackend(backend.Backend):
 
     def __iter__(self):
-        this_reader=csv.reader(open(self.filename,"rb"))
+        this_reader = csv.reader(open(self.filename, "rb"))
         if self.has_header:
-            this_reader.next() # skip header
+            this_reader.next()  # skip header
         for item in this_reader:
-            yield [ x.decode("utf-8") for x in item ]
+            yield [x.decode("utf-8") for x in item]
 
-    def batches(self,batch_size=None):
-        done=False
-        this_reader=csv.reader(open(self.filename,"rb"))
+    def batches(self, batch_size=None):
+        done = False
+        this_reader = csv.reader(open(self.filename, "rb"))
         if self.has_header:
-            this_reader.next() # skip header
+            this_reader.next()  # skip header
         while not done:
-            batch=[]
-            size=batch_size if batch_size!=None else self.batch_size
+            batch = []
+            if batch_size is not None:
+                size = batch_size
+            else:
+                size = self.batch_size
             for i in xrange(size):
                 try:
-                    batch.append( [x.decode("utf-8") 
-                                   for x in this_reader.next()])
-                except:
-                    done=True
+                    batch.append([x.decode("utf-8")
+                                  for x in this_reader.next()])
+                except StopIteration:
+                    done = True
                     break
 
             yield batch
 
-    def gather(self,x):
+    def gather(self, x):
         raise exceptions.NotImplementedError("Stream-Only")
 
-    def scatter(self,x):
+    def scatter(self, x):
         raise exceptions.NotImplementedError("Read-Only")
 
     def __contains__(self, x):
@@ -53,7 +56,7 @@ class CSVBackend(backend.Backend):
         raise exceptions.NotImplementedError("Read-Only")
 
     def __len__(self):
-        return sum(1 for r in csv.reader(open(self.filename,"rb")))
+        return sum(1 for r in csv.reader(open(self.filename, "rb")))
 
     def is_stream(self):
         return True
@@ -75,14 +78,14 @@ class CSVBackend(backend.Backend):
                  has_header=True,
                  batch_size=100):
 
-        self.filename=filename
-        self.batch_size=batch_size
-        self.has_header=has_header
+        self.filename = filename
+        self.batch_size = batch_size
+        self.has_header = has_header
 
         # cromulent CSV files have first line
         # that enumerate the fields names
-        this_reader=csv.reader(open(filename,'rb'))
+        this_reader = csv.reader(open(filename, 'rb'))
         if self.has_header:
-            self.desc=[ x.decode("utf_8_sig") for x in this_reader.next()]
+            self.desc = [x.decode("utf_8_sig") for x in this_reader.next()]
         else:
-            self.desc=[]
+            self.desc = []
