@@ -1,11 +1,10 @@
-
 import exceptions
-import cache
-import backends
+from pylearn3.data import cache
+from pylearn3.data import backends
 
 
 class DataSource:
-    
+
     def __iter__(self):
         for i in self.backend:
             yield i

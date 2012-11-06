@@ -1,4 +1,4 @@
-from cache.lru_cache import LRUCache
+from pylearn3.data.cache import LRUCache
 
 
 def show(x):

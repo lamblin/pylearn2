@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-
-import datasources.datasource
-import datasources.backends.csv_backend
+from pylearn3.data import backends
+from pylearn3.data import datasources
 
 
 def test():
 
-    x=datasources.backends.csv_backend.CSVBackend("example-data/latency.csv")
+    x = backends.CSVBackend("example-data/latency.csv")
 
     #print x[3:5:-2]
     print x.description()
@@ -21,7 +20,7 @@ def test():
 
     print len(x)   
 
-    d=datasources.datasource.DataSource(x)
+    d = datasources.DataSource(x)
 
     c=0
     for b in d.batches(5):
